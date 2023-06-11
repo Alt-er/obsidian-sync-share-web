@@ -64,13 +64,20 @@ export default function Share() {
         return "_blank";
     };
     const transformImageUri = (src, alt, title) => {
-        return `/api/share/content/${username}/${shareLinkId}?link=${src}`;
+        if (src.startsWith("http://") || src.startsWith("https://")) {
+            return src;
+        } else {
+            return `/api/share/content/${username}/${shareLinkId}?link=${src}`;
+        }
     };
 
     const transformLinkUri = (href, children, title) => {
         // console.info(href, children, title);
-        // 需要完善 这里可能直接就是一个http协议的链接
-        return `/api/share/${username}/${shareLinkId}?link=${href}`;
+        if (href.startsWith("http://") || href.startsWith("https://")) {
+            return href;
+        } else {
+            return `/api/share/${username}/${shareLinkId}?link=${href}`;
+        }
     };
 
     return (
@@ -121,7 +128,7 @@ export default function Share() {
                     table: ({ children }) => {
                         return (
                             <div className="overflow-x-auto my-4">
-                                <table className="table table-sm table-pin-rows table-pin-cols">{children}</table>
+                                <table className="table table-sm">{children}</table>
                             </div>
                         );
                     },
