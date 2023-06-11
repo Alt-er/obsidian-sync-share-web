@@ -1,0 +1,58 @@
+/*
+extend 提供的是 eslint 现有规则的一系列预设
+而 plugin 则提供了除预设之外的自定义规则，当你在 eslint 的规则里找不到合适的的时候就可以借用插件来实现了
+*/
+{
+    "env": {
+        "browser": true,
+        "es2021": true
+    },
+    /*
+        extends可以看做是集成一个个配置方案的最佳实践。它配置的内容实际就是一份份别人配置好的.eslintrc.js。
+
+        允许 extends 配置多个模块，如果规则冲突，位置靠后的包将覆盖前面的。rules 中的规则相同，并且优先级恒定高于 extends，类似class的extends，支持多继承。
+    */
+    "extends": ["plugin:react/recommended", "plugin:@typescript-eslint/recommended", "plugin:react/jsx-runtime"],
+    "overrides": [],
+    "parser": "@typescript-eslint/parser",
+    "parserOptions": {
+        "ecmaVersion": "latest",
+        "sourceType": "module"
+    },
+
+    /*
+        引入 plugin 可以理解为只是加载了插件，引入了额外的 自定义的rules。需要在 rules、extends 中定义后才会生效，如果没有则不生效。
+
+        plugin里不仅包括自定义的rules，还可以配置config，即总结的最佳实践，类似配置好的.eslintrc.js，因此这部分可以在extends里配置：plugin:config名称。
+    */
+    "plugins": ["@typescript-eslint", "react-hooks"],
+    "settings": {
+        "import/resolver": {
+            "node": {
+                "extensions": [".mjs", ".js", ".json", ".tsx"],
+                "moduleDirectory": ["node_modules", "src/"]
+            },
+            // "alias": {
+            //     "map": ["@", "./src/"],
+            //     "extensions": [".js", ".jsx"]
+            // }
+            "webpack": {
+                "config": "webpack.config.js" // 加载webpack的配置 这里可以解决路径别名eslint不能识别的问题
+            }
+        },
+        "import/extensions": [".js", ".mjs", ".jsx", ".tsx"],
+        "react": {
+            "pragma": "React",
+            "version": "detect"
+        }
+    },
+    "rules": {
+        "react-hooks/rules-of-hooks": "error",
+        "react-hooks/exhaustive-deps": "warn",
+        "react/prop-types": "off"
+    },
+    "globals": {
+        "__webpack_init_sharing__": true,
+        "__webpack_share_scopes__": true
+    }
+}
