@@ -76,6 +76,10 @@ export default function Share() {
         if (href.startsWith("http://") || href.startsWith("https://")) {
             return href;
         } else {
+            // 如果是md 直接预览
+            if (href.endsWith(".md")) {
+                return `/share/${username}/${shareLinkId}?link=${href}`;
+            }
             return `/api/share/${username}/${shareLinkId}?link=${href}`;
         }
     };
