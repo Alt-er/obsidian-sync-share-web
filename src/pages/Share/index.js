@@ -133,8 +133,10 @@ export default function Share() {
                         );
                     },
                     img: ({ node, src, alt }) => {
-                        console.info(node, src);
                         return <Image src={src} alt={alt}></Image>;
+                    },
+                    blockquote: ({ children }) => {
+                        return <blockquote className="border-l-2 border-primary pl-4 bg-base-200">{children}</blockquote>;
                     },
                     code({ node, inline, className, children, ...props }) {
                         // console.info(node, inline, className, children);
