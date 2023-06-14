@@ -85,7 +85,7 @@ export default function Share() {
     };
 
     return (
-        <div className={"mx-auto max-w-screen-md pt-6 min-h-screen"}>
+        <div className={"mx-auto max-w-screen-md pt-6 px-2 min-h-screen"}>
             <h1 className="text-4xl font-bold mb-4">{title}</h1>
             <ReactMarkdown
                 remarkPlugins={[remarkGfm]}
@@ -116,11 +116,14 @@ export default function Share() {
                     p: ({ children }) => {
                         return <p className="text-base my-4">{children}</p>;
                     },
-                    ol: ({ index, ordered, checked, className, children }) => {
-                        return <ol className="list-decimal list-inside my-4">{children}</ol>;
+                    ol: ({ index, ordered, className, children }) => {
+                        console.info(className);
+                        return <ol className={`${false ? "" : "list-decimal"} list-inside my-4 pl-8 ${className}`}>{children}</ol>;
                     },
-                    ul: ({ index, ordered, checked, className, children }) => {
-                        return <ol className="list-disc list-inside my-4">{children}</ol>;
+                    ul: ({ index, ordered, className, children }) => {
+                        console.info(className);
+
+                        return <ul className={`${false ? "" : "list-disc"} list-inside my-4 pl-8 ${className}`}>{children}</ul>;
                     },
                     a: ({ href, children, title, target }) => {
                         return (
@@ -142,6 +145,28 @@ export default function Share() {
                     blockquote: ({ children }) => {
                         return <blockquote className="border-l-2 border-primary pl-4 bg-base-200">{children}</blockquote>;
                     },
+                    // li: (node, p) => {
+                    //     //{ children, type, disabled, checked }
+                    //     console.info(node, p);
+                    //     const { className, children, checked } = node;
+                    //     return (
+                    //         <li className={`${className} list-none`}>
+                    //             <label className="align-middle cursor-pointer">{children}</label>
+                    //         </li>
+                    //     );
+                    //     // if (type == "checkbox") {
+                    //     //     return <input type={type} checked={checked} disabled={disabled} className="checkbox checkbox-xs" />;
+                    //     // }
+                    //     // return <input type={type} disabled={disabled} />;
+                    // },
+                    // input: ({ children, type, disabled, checked }) => {
+                    //     //{ children, type, disabled, checked }
+
+                    //     if (type == "checkbox") {
+                    //         return <input type={type} checked={checked} disabled={disabled} className="checkbox checkbox-xs" />;
+                    //     }
+                    //     return <input type={type} disabled={disabled} />;
+                    // },
                     code({ node, inline, className, children, ...props }) {
                         // console.info(node, inline, className, children);
                         const match = /language-(\w+)/.exec(className || "");
