@@ -49,7 +49,7 @@ export default function Share() {
 
     const isDark = theme == "dark";
 
-    console.info(isDark);
+    // console.info(isDark);
 
     useEffect(() => {
         (async () => {
@@ -117,13 +117,10 @@ export default function Share() {
                         return <p className="text-base my-4">{children}</p>;
                     },
                     ol: ({ index, ordered, className, children }) => {
-                        console.info(className);
-                        return <ol className={`${false ? "" : "list-decimal"} list-inside my-4 pl-8 ${className}`}>{children}</ol>;
+                        return <ol className={`list-decimal list-inside my-4 pl-8 ${className}`}>{children}</ol>;
                     },
                     ul: ({ index, ordered, className, children }) => {
-                        console.info(className);
-
-                        return <ul className={`${false ? "" : "list-disc"} list-inside my-4 pl-8 ${className}`}>{children}</ul>;
+                        return <ul className={`list-disc list-inside my-4 pl-8 ${className}`}>{children}</ul>;
                     },
                     a: ({ href, children, title, target }) => {
                         return (
