@@ -1,5 +1,8 @@
+import AdminLayout from "@/layouts/AdminLayout";
 import BlankLayout from "@/layouts/BlankLayout";
 import ShareLayout from "@/layouts/ShareLayout";
+import Admin from "@/pages/Admin";
+import GitConfig from "@/pages/Admin/GitConfig";
 import Home from "@/pages/Home";
 import Share from "@/pages/Share";
 import TsTest from "@/pages/TsTest";
@@ -54,6 +57,14 @@ export default [
         element: <ShareLayout />,
         children: [{ index: true, element: <Share /> }],
     },
+    // {
+    //     path: "/admin",
+    //     element: <AdminLayout />,
+    //     children: [
+    //         { index: true, element: <Navigate to="/admin/gitConfig" /> },
+    //         { path: "/admin/gitConfig", element: <GitConfig /> }
+    //     ]
+    // },
 
     // {
     //     path: "/tstest", // 主页

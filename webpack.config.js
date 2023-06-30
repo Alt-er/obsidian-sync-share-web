@@ -36,6 +36,7 @@ module.exports = (env, argv) => {
         output: {
             publicPath: "/", // auto
             path: path.resolve(__dirname, "./dist"),
+            filename: "bundle.[contenthash].js",
         },
         resolve: {
             alias: {

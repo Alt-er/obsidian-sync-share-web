@@ -15,7 +15,7 @@
     },
     "liveServer.settings.port": 5501,
     "[javascript]": {
-        "editor.defaultFormatter": "esbenp.prettier-vscode"
+        "editor.defaultFormatter": "vscode.typescript-language-features"
     },
     "files.associations": {
         "*.css": "tailwindcss"

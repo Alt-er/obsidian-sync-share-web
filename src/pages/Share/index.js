@@ -58,7 +58,7 @@ export default function Share() {
             setTitle(title);
             document.title = title;
         })();
-    });
+    }, [username, shareLinkId, link]);
 
     const linkTarget = (href, children, title) => {
         return "_blank";
