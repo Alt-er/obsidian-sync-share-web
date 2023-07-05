@@ -4,4 +4,4 @@ export const serverSourceCodeUrl = "https://github.com/Alt-er/obsidian-sync-shar
 
 export const pluginSourceCodeUrl = "https://github.com/Alt-er/obsidian-sync-share";
 
-export const serverVersion = "v1.0.0";
+export const serverVersion = "v1.1.1";
