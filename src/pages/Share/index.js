@@ -252,26 +252,24 @@ export default function Share() {
             return (node) => {
                 const outline = [];
 
-
                 if (node.type === "root" && node.children.length > 0) {
                     node.children.forEach(n => {
                         try {
                             if (n.type === "heading") {
                                 let hasDelete = false;
-                                const text = n.children
-                                    // .filter(child => child.type === "text" || child.type === "delete")
-                                    .map(child => {
+
+                                const findText = (childrens) => {
+                                    return childrens.map(child => {
                                         if (child.type === "text") {
                                             return child.value;
-                                        } else if (child.type === "delete") {
-                                            hasDelete = true;
-                                            return child.children
-                                                .filter(c => c.type === "text")
-                                                .map(c => c.value).join(" ")
+                                        } else if (child.children) {
+                                            return findText(child.children)
                                         } else {
                                             return null;
                                         }
-                                    }).join(" ")
+                                    }).filter(c => c != null).join(" ");
+                                }
+                                const text = findText(n.children);
                                 outline.push({ depth: n.depth, text, position: n.position, delete: hasDelete });
                             }
                         } catch (e) {
