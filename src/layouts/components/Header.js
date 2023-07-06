@@ -55,7 +55,7 @@ export default function Header() {
     const [userSelectedTheme, setUserSelectedTheme] = useThemeStore(({ userSelectedTheme, setUserSelectedTheme }) => [userSelectedTheme, setUserSelectedTheme], shallow);
 
     return (
-        <div className="navbar bg-base-200 sticky top-0 z-40">
+        <div className="navbar bg-base-200 sticky top-0 z-50">
             <div className="flex-1">
                 <a className="btn btn-ghost normal-case text-xl">Notes Share</a>
             </div>
