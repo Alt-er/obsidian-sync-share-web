@@ -36,47 +36,40 @@ const Image = ({ src, alt }) => {
         );
     }
 };
-function createTree(outline) {
+function createTree(outlineOrigin) {
+    const outline = [...outlineOrigin];
     const tree = [];
-    let rootDepth = Infinity;
 
-    function addToTree(parent, item) {
-        const newItem = { text: item.text, children: [], position: item.position, delete: item.delete };
-
-        if (parent === null) {
-            tree.push(newItem);
-        } else {
-            parent.children.push(newItem);
+    function addToTree(i, pi, children) {
+        if (i >= outline.length) {
+            return -1;
         }
-
-        // 递归处理子标题
-        for (let i = item.index + 1; i < outline.length; i++) {
-            if (outline[i].depth > item.depth) {
-                addToTree(newItem, outline[i]);
-            } else if (outline[i].depth === item.depth) {
-                break;
+        const item = outline[i];
+        const parent = outline[pi];
+        const newItem = { text: item.text, children: [], position: item.position, delete: item.delete };
+        if (!parent) {
+            children.push(newItem);
+        } else {
+            if (item.depth > parent.depth) {
+                children.push(newItem);
+            } else {
+                return i;
             }
         }
-    }
 
-    // 查找根节点深度
-    for (let i = 0; i < outline.length; i++) {
-        if (outline[i].depth < rootDepth) {
-            rootDepth = outline[i].depth;
+        const index = addToTree(i + 1, i, newItem.children);
+        if (index != -1) {
+            return addToTree(index, pi, children)
         }
+        return -1;
     }
 
-    // 添加伪造的根节点
-    addToTree(null, { depth: rootDepth - 1, text: 'Root' });
-
-    // 遍历大纲数组
-    for (let i = 0; i < outline.length; i++) {
-        if (outline[i].depth === rootDepth) {
-            addToTree(tree[0], { ...outline[i], index: i });
-        }
+    if (outline.length <= 0) {
+        return tree;
     }
 
-    return tree[0].children;
+    addToTree(0, -1, tree);
+    return tree;
 }
 function createMenuItem(tree) {
 
@@ -101,7 +94,7 @@ function createMenuItem(tree) {
         return t.children.length === 0 ? <li key={id}><a id={id} onClick={click}>{text}</a></li> : <li key={id}>
             <details open>
                 <summary id={id}><a onClick={click}>{text}</a></summary>
-                <ul className=" flex-nowrap [&>li>*]:auto-cols-auto [&>li>details>summary]:auto-cols-auto [&>li>a]:whitespace-normal ">
+                <ul className=" flex-nowrap [&>li>*]:auto-cols-auto [&>li>details>summary]:auto-cols-auto [&>li>details>summary>a]:whitespace-normal  [&>li>a]:whitespace-normal ">
                     {createMenuItem(t.children)}
                 </ul>
             </details>
@@ -114,6 +107,7 @@ function createMenuItem(tree) {
 function Outline({ outline }) {
     const tree = useMemo(() => createTree(outline), [outline]);
 
+    console.info(tree)
     useEffect(() => {
         const headings = outline.map((t) => {
             const id = "#id-" + t.position.start.offset + "-" + t.position.end.offset
