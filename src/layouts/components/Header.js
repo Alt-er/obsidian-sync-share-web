@@ -60,16 +60,29 @@ export default function Header() {
     useEffect(() => {
         try {
             (async () => {
-                const res = await fetch("/api/user/getNewVersion");
-                const json = await res.json();
-                const [letest, newVersion] = json.results;
 
-                if (serverVersion.endsWith(letest.name) || serverVersion.endsWith(newVersion.name)) {
+                // 从 share.cosy.plus 获取版本信息
+                const res = await fetch("https://share.cosy.plus/api/user/getNewVersion");
+                const json = await res.json();
+
+                const { version } = json;
+                if (serverVersion === version) {
                     // console.info("Currently the latest version")
                 } else {
                     // console.info("Currently not the latest version")
                     setIsLatestVersion(false);
                 }
+
+                // 暂时不用后台查询方法,因为docker hub 被墙了
+                // const res = await fetch("/api/user/getNewVersion");
+                // const json = await res.json();
+                // const [letest, newVersion] = json.results;
+                // if (serverVersion.endsWith(letest.name) || serverVersion.endsWith(newVersion.name)) {
+                //     // console.info("Currently the latest version")
+                // } else {
+                //     // console.info("Currently not the latest version")
+                //     setIsLatestVersion(false);
+                // }
             })()
         } catch (e) {
             console.error("getNewVersion error", e);
