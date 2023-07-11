@@ -7,6 +7,8 @@ const media = window.matchMedia("(prefers-color-scheme:dark)");
 const systemDefaultSelectedTheme = media.matches ? "dark" : "light";
 const userDefaultSelectedTheme = "system";
 
+// document.documentElement.setAttribute("data-theme", systemDefaultSelectedTheme);
+
 export const useThemeStore = create(
     subscribeWithSelector((set) => ({
         systemSelectedTheme: systemDefaultSelectedTheme,

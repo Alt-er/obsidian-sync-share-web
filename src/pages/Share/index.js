@@ -94,7 +94,7 @@ function createMenuItem(tree) {
         return t.children.length === 0 ? <li key={id}><a id={id} onClick={click}>{text}</a></li> : <li key={id}>
             <details open>
                 <summary id={id}><a onClick={click}>{text}</a></summary>
-                <ul className=" flex-nowrap [&>li>*]:auto-cols-auto [&>li>details>summary]:auto-cols-auto [&>li>details>summary>a]:whitespace-normal  [&>li>a]:whitespace-normal ">
+                <ul className=" flex-nowrap [&>li>*]:auto-cols-auto [&>li>details>summary]:auto-cols-auto [&>li>details>summary>a]:whitespace-normal [&>li>a]:whitespace-normal ">
                     {createMenuItem(t.children)}
                 </ul>
             </details>
@@ -107,7 +107,7 @@ function createMenuItem(tree) {
 function Outline({ outline }) {
     const tree = useMemo(() => createTree(outline), [outline]);
 
-    console.info(tree)
+    // console.info(tree)
     useEffect(() => {
         const headings = outline.map((t) => {
             const id = "#id-" + t.position.start.offset + "-" + t.position.end.offset

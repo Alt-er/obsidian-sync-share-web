@@ -1,8 +1,9 @@
 import { useEffect, useLayoutEffect, useState } from "react";
 import { Outlet } from "react-router-dom";
-import { pluginSourceCodeUrl } from "../../../github";
+import { pluginSourceCodeUrl, serverVersion } from "../../../github";
 import { useThemeStore } from "@/store/theme";
 import { shallow } from "zustand/shallow";
+
 const SystemIcon = (props) => (
     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" {...props}>
         <path
@@ -54,10 +55,35 @@ const themeIcons = {
 export default function Header() {
     const [userSelectedTheme, setUserSelectedTheme] = useThemeStore(({ userSelectedTheme, setUserSelectedTheme }) => [userSelectedTheme, setUserSelectedTheme], shallow);
 
+    const [isLatestVersion, setIsLatestVersion] = useState(true);
+
+    useEffect(() => {
+        try {
+            (async () => {
+                const res = await fetch("/api/user/getNewVersion");
+                const json = await res.json();
+                const [letest, newVersion] = json.results;
+
+                if (serverVersion.endsWith(letest.name) || serverVersion.endsWith(newVersion.name)) {
+                    // console.info("Currently the latest version")
+                } else {
+                    // console.info("Currently not the latest version")
+                    setIsLatestVersion(false);
+                }
+            })()
+        } catch (e) {
+            console.error("getNewVersion error", e);
+        }
+
+    }, [])
+
     return (
         <div className="navbar bg-base-200 sticky top-0 z-50">
             <div className="flex-1">
-                <a className="btn btn-ghost normal-case text-xl">Notes Share</a>
+                <div className="indicator ">
+                    <span className={`indicator-item badge badge-warning top-2 ${isLatestVersion ? "hidden" : ""}`}>new</span>
+                    <a href="https://hub.docker.com/r/alterzz/obsidian-sync-share-server/tags" target="_blank" className="btn btn-ghost normal-case text-xl">Notes Share</a>
+                </div>
             </div>
             <div className="flex justify-end flex-1 px-2">
                 <div className="flex items-stretch">
