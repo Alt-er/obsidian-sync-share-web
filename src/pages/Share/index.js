@@ -46,7 +46,7 @@ function createTree(outlineOrigin) {
         }
         const item = outline[i];
         const parent = outline[pi];
-        const newItem = { text: item.text, children: [], position: item.position, delete: item.delete };
+        const newItem = { text: item.text, children: [], position: item.position };
         if (!parent) {
             children.push(newItem);
         } else {
@@ -90,8 +90,7 @@ function createMenuItem(tree) {
                 }, 1200);
             }, 0)
         }
-        const text = t.delete ? <del>{t.text}</del> : t.text
-        return t.children.length === 0 ? <li key={id}><a id={id} onClick={click}>{text}</a></li> : <li key={id}>
+        return t.children.length === 0 ? <li key={id}><a id={id} onClick={click}>{t.text}</a></li> : <li key={id}>
             <details open>
                 <summary id={id}><a onClick={click}>{text}</a></summary>
                 <ul className=" flex-nowrap [&>li>*]:auto-cols-auto [&>li>details>summary]:auto-cols-auto [&>li>details>summary>a]:whitespace-normal [&>li>a]:whitespace-normal ">
@@ -250,21 +249,21 @@ export default function Share() {
                     node.children.forEach(n => {
                         try {
                             if (n.type === "heading") {
-                                let hasDelete = false;
-
                                 const findText = (childrens) => {
-                                    return childrens.map(child => {
+                                    return childrens.map((child, i) => {
                                         if (child.type === "text") {
                                             return child.value;
+                                        } else if (child.type === "delete" && child.children) {
+                                            return <del key={i}>{findText(child.children)}</del>
                                         } else if (child.children) {
                                             return findText(child.children)
                                         } else {
                                             return null;
                                         }
-                                    }).filter(c => c != null).join(" ");
+                                    }).filter(c => c != null);
                                 }
                                 const text = findText(n.children);
-                                outline.push({ depth: n.depth, text, position: n.position, delete: hasDelete });
+                                outline.push({ depth: n.depth, text, position: n.position });
                             }
                         } catch (e) {
                             console.error(e);
@@ -272,9 +271,7 @@ export default function Share() {
                     })
                 }
 
-
-                // console.info(JSON.stringify(outline));
-                setTimeout(() => setOutline(temp => JSON.stringify(temp) === JSON.stringify(outline) ? temp : outline), 0)
+                setTimeout(() => setOutline(outline), 0)
             }
         }
         return <ReactMarkdown
