@@ -9,6 +9,11 @@ import { vscDarkPlus, prism } from "react-syntax-highlighter/dist/esm/styles/pri
 import { CopyToClipboard } from "react-copy-to-clipboard";
 import { useUsedTheme } from "@/store/theme";
 
+import remarkMath from 'remark-math'
+// import rehypeKatex from 'rehype-katex'
+
+// import 'katex/dist/katex.min.css' // `rehype-katex` does not import the CSS for you
+
 const Image = ({ src, alt }) => {
     if (src && (src.endsWith("jpg") || src.endsWith("png") || src.endsWith("gif") || src.endsWith("webp") || src.endsWith("bmp"))) {
         return <img src={src} alt={alt}></img>;
@@ -92,7 +97,7 @@ function createMenuItem(tree) {
         }
         return t.children.length === 0 ? <li key={id}><a id={id} onClick={click}>{t.text}</a></li> : <li key={id}>
             <details open>
-                <summary id={id}><a onClick={click}>{text}</a></summary>
+                <summary id={id}><a onClick={click}>{t.text}</a></summary>
                 <ul className=" flex-nowrap [&>li>*]:auto-cols-auto [&>li>details>summary]:auto-cols-auto [&>li>details>summary>a]:whitespace-normal [&>li>a]:whitespace-normal ">
                     {createMenuItem(t.children)}
                 </ul>
@@ -187,6 +192,7 @@ function Outline({ outline }) {
 }
 
 
+let loadMathing = false;
 
 export default function Share() {
     const [searchParams] = useSearchParams();
@@ -198,6 +204,8 @@ export default function Share() {
     const [outline, setOutline] = useState([]);
 
     const [title, setTitle] = useState("");
+
+    const [rehypePlugins, setRehypePlugins] = useState([]);
 
     const theme = useUsedTheme();
 
@@ -238,11 +246,22 @@ export default function Share() {
         }
     };
 
+
+
     const markdown = useMemo(() => {
 
+        const loadMath = async () => {
+            if (!loadMathing) {
+                loadMathing = true;
+                const katex = await import('rehype-katex');
+                await import('katex/dist/katex.min.css')
+                setRehypePlugins((arr) => arr.find(katex.default) ? arr : [...arr, katex.default])
+            }
+        }
 
         const remarkOutline = () => {
             return (node) => {
+                // console.info(node)
                 const outline = [];
 
                 if (node.type === "root" && node.children.length > 0) {
@@ -264,6 +283,9 @@ export default function Share() {
                                 }
                                 const text = findText(n.children);
                                 outline.push({ depth: n.depth, text, position: n.position });
+                            } else if (n.type === "inlineMath" || n.type === "math") {
+                                // 发现数学公式
+                                loadMath();
                             }
                         } catch (e) {
                             console.error(e);
@@ -275,8 +297,8 @@ export default function Share() {
             }
         }
         return <ReactMarkdown
-            remarkPlugins={[remarkGfm, remarkOutline]}
-            rehypePlugins={[rehypeRaw]}
+            remarkPlugins={[remarkGfm, remarkMath, remarkOutline]}
+            rehypePlugins={[rehypeRaw, ...rehypePlugins]}
             linkTarget={linkTarget}
             // allowedElements={["br"]}
             transformImageUri={transformImageUri}
@@ -409,7 +431,7 @@ export default function Share() {
         >
             {noteContent}
         </ReactMarkdown>
-    }, [noteContent, isDark])
+    }, [noteContent, isDark, rehypePlugins])
 
 
     return (
