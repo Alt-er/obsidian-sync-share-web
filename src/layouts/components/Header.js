@@ -61,8 +61,8 @@ export default function Header() {
         try {
             (async () => {
 
-                // 从 share.cosy.plus 获取版本信息
-                const res = await fetch("https://share.cosy.plus/api/user/getNewVersion");
+                // 从 share.alter.run 获取版本信息
+                const res = await fetch("https://share.alter.run/api/user/getNewVersion");
                 const json = await res.json();
 
                 const { version } = json;

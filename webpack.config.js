@@ -26,7 +26,7 @@ module.exports = (env, argv) => {
             proxy: {
                 "/api": {
                     // target: "http://localhost:8080",
-                    target: "https://share.cosy.plus",
+                    target: "https://share.alter.run",
                     secure: false, // 支持https
                     changeOrigin: true, // 修改host头
                     //pathRewrite: { '^/cosy': '/cosy' }, // 重写路径
