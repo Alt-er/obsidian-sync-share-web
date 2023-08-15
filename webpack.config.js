@@ -26,7 +26,8 @@ module.exports = (env, argv) => {
             proxy: {
                 "/api": {
                     // target: "http://localhost:8080",
-                    target: "https://share.alter.run",
+                    // target: "https://share.alter.run",
+                    target: "http://81.69.233.110:8080",
                     secure: false, // 支持https
                     changeOrigin: true, // 修改host头
                     //pathRewrite: { '^/cosy': '/cosy' }, // 重写路径

@@ -98,7 +98,7 @@ function createMenuItem(tree) {
         return t.children.length === 0 ? <li key={id}><a id={id} onClick={click}>{t.text}</a></li> : <li key={id}>
             <details open>
                 <summary id={id}><a onClick={click}>{t.text}</a></summary>
-                <ul className=" flex-nowrap [&>li>*]:auto-cols-auto [&>li>details>summary]:auto-cols-auto [&>li>details>summary>a]:whitespace-normal [&>li>a]:whitespace-normal ">
+                <ul className=" flex-nowrap [&>li>*]:auto-cols-auto [&>li>details>summary]:auto-cols-auto [&>li>details>summary>a]:whitespace-normal [&>li>a]:whitespace-normal [&>li>details>summary>a]:break-all [&>li>a]:break-all">
                     {createMenuItem(t.children)}
                 </ul>
             </details>
@@ -184,7 +184,7 @@ function Outline({ outline }) {
         </label>
 
         <div className={`fixed right-6 ${showOutlineOnXl ? "w-60" : "w-0"} xl:w-60 z-40 rounded-md overflow-y-auto h-[calc(100%-150px)]`}>
-            <ul className="menu bg-base-100 text-base-content text-xs flex-nowrap [&>li>*]:auto-cols-auto [&>li>details>summary]:auto-cols-auto [&>li>a]:whitespace-normal">
+            <ul className="menu bg-base-100 text-base-content text-xs flex-nowrap [&>li>*]:auto-cols-auto [&>li>details>summary]:auto-cols-auto [&>li>a]:whitespace-normal [&>li>details>summary>a]:break-all [&>li>a]:break-all">
                 {createMenuItem(tree)}
             </ul>
         </div>
@@ -212,6 +212,8 @@ export default function Share() {
     const isDark = theme == "dark";
 
     // console.info(isDark);
+
+
 
     useEffect(() => {
         (async () => {
@@ -432,6 +434,18 @@ export default function Share() {
             {noteContent}
         </ReactMarkdown>
     }, [noteContent, isDark, rehypePlugins])
+
+
+    useEffect(() => {
+        if (noteContent && window.location.hash) {
+            setTimeout(() => {
+                const element = document.querySelector(window.location.hash);
+                if (element) {
+                    element.scrollIntoView({ behavior: 'smooth' });
+                }
+            }, 200)
+        }
+    }, [noteContent]);
 
 
     return (
