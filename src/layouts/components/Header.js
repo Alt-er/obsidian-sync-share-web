@@ -51,7 +51,10 @@ const themeIcons = {
         </>
     ),
 };
-
+function getParam(key) {
+    var urlParams = new URLSearchParams(window.location.search);
+    return urlParams.get(key);
+}
 export default function Header() {
     const [userSelectedTheme, setUserSelectedTheme] = useThemeStore(({ userSelectedTheme, setUserSelectedTheme }) => [userSelectedTheme, setUserSelectedTheme], shallow);
 
@@ -90,8 +93,9 @@ export default function Header() {
 
     }, [])
 
+    const position = getParam('headerPosition'); // sticky static
     return (
-        <div className="navbar bg-base-200 sticky top-0 z-50">
+        <div className={"navbar bg-base-200 top-0 z-50 " + position}>
             <div className="flex-1">
                 <div className="indicator ">
                     <span className={`indicator-item badge badge-warning top-2 ${isLatestVersion ? "hidden" : ""}`}>new</span>
@@ -111,7 +115,7 @@ export default function Header() {
                             {themeIcons[userSelectedTheme]}
                             <span className="hidden sm:inline">{userSelectedTheme}</span>
                         </label>
-                        <ul tabIndex="0" className="menu dropdown-content p-2 shadow bg-base-100 rounded-box w-52 mt-4">
+                        <ul tabIndex="0" className="menu dropdown-content p-2 shadow bg-base-100 rounded-box w-52 mt-4 z-50">
                             <li>
                                 <a
                                     className={userSelectedTheme == "light" ? " active " : ""}
